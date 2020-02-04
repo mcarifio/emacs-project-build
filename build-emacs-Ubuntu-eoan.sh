@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 
-# This script is expected to sit in a directory above the emacs git repo
-# with naming convention `build-emacs-${HOST}.sh`. It takes one argument,
-# the emacs git branch to build, e.g. `master` or `emacs-27`.
+# This script is expected to sit in a directory below the emacs git repo
+# with naming convention `build-emacs-$(lsb_release -ic)-$(lsb_release -sc).sh`,
+# for example `build-emacs-Ubuntu-eoan.sh`.
+# It takes one argument, the emacs git branch||tag to build, e.g. `master` or `emacs-27`.
+
+# This script does "just enough" to build from sources and install at the "prefix" location below.
+# There are many ways to build software (make/gmake, etc.) and there are dozens of build tools.
+# This isn't an exercise is buildology, it's just one set of conventions to build emacs from sources.
+
+# See `./README` for how to use this script (and others).
 
 
 me=$(realpath ${BASH_SOURCE:-$0})
 here=${me%/*}
-basename=$(basename ${me})
 
 # error out with a message and status.
 function _error {
@@ -34,9 +40,14 @@ function folder {
 }
 
 
-repo=$(folder ${basename} 1)
+project_subtree_root=$(git rev-parse --show-toplevel)
+project_root=$(git -C ${project_subtree_root} rev-parse --show-toplevel)
+basename=$(basename ${project_root})
+repo=${basename}
 branch=${1:-emacs-27}
 
+
+# A hack. Move up to the project root to simplify commands.
 cd ${repo}
 starting_branch=$(git rev-parse --abbrev-ref HEAD)
 # git stash ${branch} ${name}
