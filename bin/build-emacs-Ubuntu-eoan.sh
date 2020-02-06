@@ -16,7 +16,7 @@ me=$(realpath ${BASH_SOURCE:-$0})
 here=${me%/*}
 source ${here}/utils.env.sh
 
-project_subtree_root=$(git rev-parse --show-toplevel)
+project_subtree_root=$(git -C ${here} rev-parse --show-toplevel)
 project_root=$(git -C ${project_subtree_root}/.. rev-parse --show-toplevel)
 basename=$(basename ${project_root})
 repo=${basename}

@@ -9,7 +9,7 @@ To use this git repo as a subrepo, do:
 git_root=$(git rev-parse --show-toplevel)  # the root of the emacs git repo
 cd ${git_root}
 git subrepo clone https://github.com/mcarifio/emacs-project-build project/build -b prod
-echo "/project-?*/**" >> ${git_root}/.git/info/exclude
+echo "/project/**" >> ${git_root}/.git/info/exclude
 export PATH="${git_root}/project/build/bin:${git_root}/project/build:$PATH" # optional
 ```
 
