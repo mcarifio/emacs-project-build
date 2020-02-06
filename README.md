@@ -1,16 +1,13 @@
 # emacs-project-build
 
-This repo is meant to be a [subrepo](https://github.com/ingydotnet/git-subrepo/) for [emacs](https://github.com/emacs-mirror/emacs). It provides some shell 
+This repo is meant to be a "child repo" for [emacs](https://github.com/emacs-mirror/emacs). It provides some shell 
 scripts and other conveniences to build emacs from sources fetched via git.
 
-To use this git repo as a subrepo, do:
+To use it, run these commands at the root of your emacs clone:
 
 ```bash
-git_root=$(git rev-parse --show-toplevel)  # the root of the emacs git repo
-cd ${git_root}
-git subrepo clone https://github.com/mcarifio/emacs-project-build project/build -b prod
-echo "/project/**" >> ${git_root}/.git/info/exclude
-export PATH="${git_root}/project/build/bin:${git_root}/project/build:$PATH" # optional
+git clone --branch=prod https://github.com/mcarifio/emacs-project-build $(git rev-parse --show-toplevel)/project/build
+source project/build/connect.sh
 ```
 
 This should create a local file tree that looks like:
@@ -21,7 +18,7 @@ This should create a local file tree that looks like:
 ...
 
 ├── project/
-│   └── build/
+│   └── build/bin/
 │       ├── build-emacs-Ubuntu-eoan.sh*
 │       ├── README.md
 │       ├── utils.env.sh
@@ -34,16 +31,18 @@ This should create a local file tree that looks like:
 To build emacs for various (newer) Linux flavors:
 
 ```
+./project/build/bin/build-emacs-Ubuntu-eoan.sh
+# or
 build-emacs-Ubuntu-eoan.sh
 ```
 
-As I add more flavors, I create or modify these scripts.
+As I add more flavors, I'll create or modify the various scripts.
 
 
-To update the subtree:
+To update the child:
 
 ```bash
-git subrepo pull project/build
+git -C project/build pull
 ```
 
 
